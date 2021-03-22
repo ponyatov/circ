@@ -148,6 +148,20 @@ class Class(Meta):
 class IO(Object):
     pass
 
+import datetime as dt
+
+class Time(IO):
+    def __init__(self, V=None):
+        if not V:
+            self.now = dt.datetime.now()
+            self.date = self.now.strftime('%Y-%m-%d')
+            self.time = self.now.strftime('%H:%M:%S')
+            V = f'{self.now}'
+        super().__init__(V)
+
+    def json(self):
+        return {"date": self.date, "time": self.time}
+
 class Path(IO):
     pass
 
@@ -239,19 +253,31 @@ class Net(IO):
 # / Net
 # \ Web
 import flask
+from flask_socketio import SocketIO
+
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 class Web(Net):
     def __init__(self):
         super().__init__(MODULE)
         self.app = flask.Flask(self.value)
+        self.route()
+        self.sio = SocketIO(self.app)
+        self.socket()
 
+    def route(self):
         @self.app.route('/')
         def index():
             return flask.render_template('index.html',
                                          glob=glob, env=glob)
 
+    def socket(self):
+        @self.sio.on('connect')
+        def connect(): self.sio.emit('localtime', Time().json(), broadcast=True)
+
     def eval(self, env):
-        self.app.run(host=config.HOST, port=config.PORT, debug=True)
+        self.sio.run(self.app, host=config.HOST, port=config.PORT, debug=True)
 
 
 # / Web
@@ -575,7 +601,7 @@ aptdev \
     // 'sqlitebrowser'
 
 reqs = File('requirements', '.txt'); circ // reqs
-reqs // 'Flask' // 'Flask-SQLAlchemy'
+reqs // 'Flask' // 'Flask-SocketIO' // 'Flask-SQLAlchemy' // 'watchdog'
 
 py = pyFile('metaL'); circ // py
 
@@ -614,6 +640,10 @@ py \
         // '') \
     // (Sec('Web')
         // 'import flask'
+        // 'from flask_socketio import SocketIO'
+        // ''
+        // 'from watchdog.observers import Observer'
+        // 'from watchdog.events import FileSystemEventHandler'
         // ''
         // Class(Web, [Net])
         // '') \
