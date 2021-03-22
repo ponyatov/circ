@@ -35,6 +35,9 @@ S     += metaL.py test_metaL.py
 all: $(PY) metaL.py
 	$^ $@
 	$(MAKE) format
+.PHONY: web
+web: $(PY) metaL.py
+	$^ $@
 .PHONY: test
 test: $(PYT) test_metaL.py
 	$^
@@ -52,7 +55,7 @@ iex:
 doc: \
 	doc/Armstrong_ru.pdf
 doc/Armstrong_ru.pdf:
-		$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf
+	$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf
 # / doc
 # \ install
 .PHONY: install

@@ -222,7 +222,20 @@ class exsFile(exFile):
 
 # / File
 # / IO
+# \ Net
+class Net(IO):
+    pass
 
+
+# / Net
+# \ Web
+import flask
+
+class Web(Net):
+    pass
+
+
+# / Web
 # \ metacircular
 
 
@@ -384,6 +397,7 @@ tasks \
         // (S('"tasks": [', ']')
             // vscodeTask('project', 'install')
             // vscodeTask('project', 'update')
+            // vscodeTask('make', 'web')
             ))
 
 extensions = jsonFile('extensions'); vscode // extensions
@@ -449,45 +463,47 @@ mk \
     // Sec('obj')\
     // Sec('cfg')\
     // (mkAll \
-        // '.PHONY: all' \
-        // 'all: $(PY) metaL.py' \
-        // '\t$^ $@' \
-        // '\t$(MAKE) format' \
+        // (S('all: $(PY) metaL.py', pfx='.PHONY: all') \
+            // '$^ $@' \
+            // '$(MAKE) format') \
+        // (S('web: $(PY) metaL.py', pfx='.PHONY: web') \
+            // '$^ $@') \
         // '.PHONY: test' \
-        // 'test: $(PYT) test_metaL.py' \
-        // '\t$^' \
-        // '\t$(MAKE) format' \
-        // '.PHONY: format' \
-        // 'format: $(PEP)' \
-        // '$(PEP): $(S)' \
-        // f'\t$@ {autopep8} --in-place $? && touch $@' \
+        // (S('test: $(PYT) test_metaL.py') \
+            // '$^' \
+            // '$(MAKE) format') \
+        // (S('format: $(PEP)', pfx='.PHONY: format')) \
+        // (S('$(PEP): $(S)') \
+            // f'$@ {autopep8} --in-place $? && touch $@') \
         ) \
     // (Sec('doc') \
         // (S('doc: \\', pfx='.PHONY: doc') \
             // 'doc/Armstrong_ru.pdf') \
         // (S('doc/Armstrong_ru.pdf:') \
-        // '\t$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf') \
+        // '$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf') \
         ) \
     // (Sec('install')
         // '.PHONY: install'
-        // 'install: $(OS)_install js doc'
-        // '\t$(MAKE) $(PIP)'
-        // '\t$(MAKE) update'
+        // (S('install: $(OS)_install js doc') \
+            // '$(MAKE) $(PIP)' \
+            // '$(MAKE) update'
+            ) \
         // '.PHONY: update'
-        // 'update: $(OS)_update'
-        // '\t$(PIP) install -U    pip autopep8'
-        // '\t$(PIP) install -U -r requirements.txt'
-        // '\t$(MIX) deps.get'
+        // (S('update: $(OS)_update')
+            // '$(PIP) install -U    pip autopep8'
+            // '$(PIP) install -U -r requirements.txt'
+            // '$(MIX) deps.get') \
         // '.PHONY: Linux_install Linux_update'
-        // 'Linux_install Linux_update:'
-        // '\tsudo apt update'
-        // '\tsudo apt install -u `cat apt.txt apt.dev`'
+        // (S('Linux_install Linux_update:')
+            // 'sudo apt update'
+            // 'sudo apt install -u `cat apt.txt apt.dev`') \
         // (Sec('py')
-            // '$(PY) $(PIP):' \
-            // '\tpython3 -m venv .' \
-            // '\t$(MAKE) update' \
-            // '$(PYT):' \
-            // '\t$(PIP) install -U pytest')\
+            // (S('$(PY) $(PIP):') \
+            // 'python3 -m venv .' \
+            // '$(MAKE) update') \
+            // (S('$(PYT):') \
+            // '$(PIP) install -U pytest')\
+            )\
         // (Sec('js') // S('js:', pfx='.PHONY: js'))\
         )\
     // Sec('merge')
@@ -538,8 +554,18 @@ py \
             // Class(exsFile, [File])
             )
         ) \
+    // (Sec('Net')
+        // Class(Net, [IO])
+        // '') \
+    // (Sec('Web')
+        // 'import flask'
+        // ''
+        // Class(Web, [Net])
+        // '') \
     // (Sec('metacircular') // '') \
-    // ''
+    // (Sec('system init')
+        // (S('if __name__ == "__main__":') // 'pass')
+        )
 
 pytest = pyFile('test_metaL'); circ // pytest
 pytest // 'def test_any(): assert True'
@@ -622,3 +648,7 @@ mkAll \
 circ.sync()
 
 # / metacircular
+# \ system init
+if __name__ == "__main__":
+    pass
+# / system init
