@@ -30,7 +30,7 @@
 		// \ py
 		"**/__pycache__/**":true,
 		"**/bin/**":true,
-		"**/lib/**":true, "**/lib64/**":true,
+		"**/lib/python*/**":true, "**/lib64/**":true,
 		"**/share/**":true, "**/include/site/**":true,
 		"**/pyvenv.cfg":true, "**/*.pyc":true,
 		// / py
@@ -42,7 +42,7 @@
 		// \ py
 		"**/__pycache__/**":true,
 		"**/bin/**":true,
-		"**/lib/**":true, "**/lib64/**":true,
+		"**/lib/python*/**":true, "**/lib64/**":true,
 		"**/share/**":true, "**/include/site/**":true,
 		"**/pyvenv.cfg":true, "**/*.pyc":true,
 		// / py

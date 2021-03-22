@@ -348,7 +348,7 @@ def pyFiles():
     return (Sec('py')
             // '"**/__pycache__/**":true,'
             // '"**/bin/**":true,'
-            // '"**/lib/**":true, "**/lib64/**":true,'
+            // '"**/lib/python*/**":true, "**/lib64/**":true,'
             // '"**/share/**":true, "**/include/site/**":true,'
             // '"**/pyvenv.cfg":true, "**/*.pyc":true,'
             )
@@ -471,7 +471,8 @@ mk \
         // '.PHONY: test' \
         // (S('test: $(PYT) test_metaL.py') \
             // '$^' \
-            // '$(MAKE) format') \
+            // '$(MAKE) format'
+            // '$(MIX)  test') \
         // (S('format: $(PEP)', pfx='.PHONY: format')) \
         // (S('$(PEP): $(S)') \
             // f'$@ {autopep8} --in-place $? && touch $@') \
@@ -638,7 +639,7 @@ mix \
         // ''
         // (S('def application do', 'end') // (S('[', ']')
             // 'extra_applications: [:logger],'
-            // 'mod: {Metal.Application, []}'))
+            // 'mod: {Metal, []}'))
         // ''
         // (S('defp deps do', 'end') // (S('[', ']')
             // '{:cowboy, "~> 2.8"},'
@@ -647,6 +648,24 @@ mix \
 
 mkAll \
     // (S('iex:', pfx='.PHONY: iex') // '$(IEX) -S $(MIX)')
+
+lib = Dir('lib'); circ // lib
+
+ex = exFile('metal'); lib // ex
+ex \
+    // (S('defmodule Metal do', 'end')
+        // 'use Application'
+        // (S('def start(_type, _args) do', 'end')
+            // (S('children = [', ']'))
+            // 'opts = [strategy: :one_for_one, name: Metal.Supervisor]'
+            // 'Supervisor.start_link(children, opts)'
+            )
+        )
+
+test = Dir('test'); circ // test
+extesthlp = exsFile('test_helper'); test // extesthlp
+extesthlp // 'ExUnit.start()'
+extest = exsFile('metal_test'); test // extest
 
 # print(circ)
 circ.sync()

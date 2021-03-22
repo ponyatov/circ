@@ -42,6 +42,7 @@ web: $(PY) metaL.py
 test: $(PYT) test_metaL.py
 	$^
 	$(MAKE) format
+	$(MIX)  test
 .PHONY: format
 format: $(PEP)
 $(PEP): $(S)
