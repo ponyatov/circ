@@ -493,7 +493,10 @@ templates = Dir('templates'); circ // templates
 
 index = htmlFile('index'); templates // index
 
-index \
+index // '{% extends "all.html" %}'
+
+allhtml = htmlFile('all'); templates // allhtml
+allhtml \
     // '<!DOCTYPE html>' \
     // (S('<html lang="ru">', '</html>')
         // (S('<head>', '</head>')
