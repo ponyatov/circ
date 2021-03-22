@@ -148,6 +148,7 @@ class Class(Meta):
 class IO(Object):
     pass
 
+
 import datetime as dt
 
 class Time(IO):
@@ -619,6 +620,7 @@ py \
         // Class(Class, [Meta])) \
     // (Sec('IO') // ''
         // Class(IO, [Object])
+        // Class(Time, [IO])
         // Class(Path, [IO])
         // Class(Dir, [IO])
         // (Sec('File') // ''
@@ -649,7 +651,13 @@ py \
         // '') \
     // (Sec('metacircular') // '') \
     // (Sec('system init')
-        // (S('if __name__ == "__main__":') // 'pass')
+        // (S('if __name__ == "__main__":')
+            // 'if sys.argv[1] == \'all\':'
+            // '    pass'
+            // 'elif sys.argv[1] == \'web\':'
+            // '    Web().eval(glob)'
+            // 'else:'
+            // '    raise SyntaxError(sys.argv)')
         )
 
 pytest = pyFile('test_metaL'); circ // pytest
