@@ -40,6 +40,12 @@ for a hobby is limited by its vendors. If we want to use some features from cool
 but low-used language, we can't do it because it is prohibited by our
 contractors and teammates.
 
+The idea about code templating is a way of using the power of your own custom
+language still having no incompatibles with your production team. In most cases,
+nobody locks you on the IDE you use for development, so if you also add some
+shadow tool that generates human-readable code in the mainstream language of
+your team, you'll have a chance to use the power without the risks shown above.
+
 ## Links
 
 
