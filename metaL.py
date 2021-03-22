@@ -220,6 +220,24 @@ README \
     // '  * `Clojure` homoiconic extendable language' \
     // '  * `Smalltalk` message-based OOP' \
     // '' \
+    // '### `metaL` is not a programming language' \
+    // '' \
+    // '`metaL` is a method of programming in Python, or any other language you prefer.' \
+    // 'It works over two key features:' \
+    // '* homoiconic self-modifying data structures' \
+    // '* metaprogramming via code generation' \
+    // '' \
+    // 'All `metaL` structures should be defined directly in the *host language*' \
+    // '(Python), and there is no syntax parser, as all you need for parsing you already' \
+    // 'has in your compiler.' \
+    // '' \
+    // 'The idea of the `metaL` originates from an idea of the *generic code'\
+    // 'templating*. Any mainstream programming language we\'re using any day at work or'\
+    // 'for a hobby is limited by its vendors. If we want to use some features from cool'\
+    // 'but low-used language, we can\'t do it because it is prohibited by our'\
+    // 'contractors and teammates.'\
+    // '' \
+    // '' \
     // '## Links' \
     // '' \
     // ''
