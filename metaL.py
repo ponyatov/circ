@@ -23,7 +23,7 @@ class Object:
         ret = self.pad(depth) + self.head(prefix)
         # cycle
         if not depth: cycle = []
-        if self in cycle: return ret + '_/'
+        if self in cycle: return ret + ' _/'
         else: cycle += [self]
         # slot{}s
         for i in self.keys():
@@ -36,7 +36,7 @@ class Object:
 
     ## short single line `<T:V>` header
     def head(self, prefix=''):
-        return f'{prefix}{self.tag()}:{self.val()}'
+        return f'{prefix}<{self.tag()}:{self.val()}> @{id(self):x}'
 
     ## tree padding
     def pad(self, depth):
@@ -56,16 +56,24 @@ class Object:
     def keys(self):
         return sorted(self.slot.keys())
 
+    ## `A[key]`
+    def __getitem__(self, key):
+        assert isinstance(key, str)
+        return self.slot[key]
+
     ## `A[key] = B`
     def __setitem__(self, key, that):
         assert isinstance(key, str)
         assert isinstance(that, Object)
         self.slot[key] = that; return self
 
-    ## `A[key]`
-    def __getitem__(self, key):
-        assert isinstance(key, str)
-        return self.slot[key]
+    ## `A << B -> A[B.tag] = B`
+    def __lshift__(self, that):
+        return self.__setitem__(that.tag(), that)
+
+    ## `A >> B -> A[B.value] = B`
+    def __rshift__(self, that):
+        return self.__setitem__(that.val(), that)
 
     ## `A // B -> A.push(B)`
     def __floordiv__(self, that):
@@ -76,7 +84,7 @@ class Object:
 class Env(Object): pass
 
 
-glob = Env('global')
+glob = Env('global'); glob << glob
 
 class Primitive(Object):
     pass
@@ -266,6 +274,7 @@ class Web(Net):
         self.route()
         self.sio = SocketIO(self.app)
         self.socket()
+        self.inotify()
 
     def route(self):
         @self.app.route('/')
@@ -279,6 +288,19 @@ class Web(Net):
 
     def eval(self, env):
         self.sio.run(self.app, host=config.HOST, port=config.PORT, debug=True)
+
+    ## file change watcher/notifier
+    def inotify(self):
+        watch = Observer()
+        sio = self.sio
+
+        class event_handler(FileSystemEventHandler):
+            def on_closed(self, event):
+                if not event.is_directory:
+                    sio.emit('reload', f'{event}')
+        watch.schedule(event_handler(), 'static', recursive=True)
+        watch.schedule(event_handler(), 'templates', recursive=True)
+        watch.start()
 
 
 # / Web
@@ -761,7 +783,7 @@ index = htmlFile('index'); templates // index
 index \
     // '{% extends "all.html" %}' \
     // '{% block body %}' \
-    // '<pre id=dump class=dump>{{env.dump()}}</pre>' \
+    // '<pre id="dump" class="dump">{{env.dump()}}</pre>' \
     // '{% endblock %}'
 
 allhtml = htmlFile('all'); templates // allhtml
