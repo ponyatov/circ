@@ -291,8 +291,7 @@ class Web(Net):
 
     ## file change watcher/notifier
     def inotify(self):
-        watch = Observer()
-        sio = self.sio
+        watch = Observer(); sio = self.sio
 
         class event_handler(FileSystemEventHandler):
             def on_closed(self, event):
