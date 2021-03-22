@@ -46,6 +46,19 @@ nobody locks you on the IDE you use for development, so if you also add some
 shadow tool that generates human-readable code in the mainstream language of
 your team, you'll have a chance to use the power without the risks shown above.
 
+### Concept Programming
+
+CP here is a programming model described in the works of Enn Heraldovich Tyugu
+about model-based software development. It is not mean the term by Alexsandr
+Stepanov here. The common idea is about making domain models describe the
+problem in a wide in the form of relation networks, and automatic program (code)
+synthesis from specifications to solve concrete tasks. This synthesis works over
+these networks using them as generic knowledge representation.
+
+* http://www.cs.ioc.ee/~tyugu/
+* J. Symbolic Computation (1988) 5, 359-375\ The Programming System PRIZ [sym88]
+* Marvin Minsky [A Framework for Representing Knowledge](https://web.media.mit.edu/~minsky/papers/Frames/frames.html)
+
 ## Links
 
 
