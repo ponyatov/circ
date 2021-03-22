@@ -354,6 +354,8 @@ config \
     // f'{"HOST":<11} = "127.0.0.1"' \
     // f'{"PORT":<11} = 12345'
 
+giti // '' // '/deps/' // '/mix.lock'
+
 formatter = exsFile('.formatter'); circ // formatter
 formatter \
     // (S('[', ']')
@@ -368,7 +370,14 @@ mix \
             // 'app: :metal,'
             // 'version: "0.0.1",'
             // 'elixir: "~> 1.11",'
-            // '')
+            // 'deps: deps()')
+        // ''
+        // (S('def application do [', '] end')
+            // 'extra_applications: [:logger],'
+            // 'mod: {Metal.Application, []}')
+        // (S('defp deps do [', '] end')
+            // '{:cowboy, "~> 2.8"},'
+            // '{:exsync, "~> 0.2", only: :dev}')
         )
 
 # print(circ)
