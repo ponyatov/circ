@@ -56,7 +56,12 @@ synthesis from specifications to solve concrete tasks. This synthesis works over
 these networks using them as generic knowledge representation.
 
 * http://www.cs.ioc.ee/~tyugu/
-* J. Symbolic Computation (1988) 5, 359-375\ The Programming System PRIZ [sym88]
+  * Тыугу Э.Х. **Концептуальное программирование**.
+    М.: Наука, 1984. 255 с
+  * М.И.Кахро, А.П.Калья, Энн Харальдович Тыугу
+    **Инструментальная система программирования ЕС ЭВМ (ПРИЗ)**
+    М.: Финансы и статистика, 1988
+  * J. Symbolic Computation (1988) 5, 359-375\ The Programming System PRIZ [sym88]
 * Marvin Minsky [A Framework for Representing Knowledge](https://web.media.mit.edu/~minsky/papers/Frames/frames.html)
 
 ## Links
