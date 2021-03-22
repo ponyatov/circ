@@ -609,7 +609,14 @@ allhtml \
 giti // '' // '*.beam'
 
 erl = erlFile('hello'); src // erl
-erl // '-module(hello).'
+erl \
+    // '-module(hello).' \
+    // '-exporr(world/0).' \
+    // '-on_load(reload/0).' \
+    // '' \
+    // 'reload() -> ok.' \
+    // '' \
+    // 'world() -> "World".'
 
 giti // '' // '/_build/' // '/deps/' // '/mix.lock'
 
