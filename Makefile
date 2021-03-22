@@ -56,7 +56,7 @@ update: $(OS)_update
 .PHONY: Linux_install Linux_update
 Linux_install Linux_update:
 	sudo apt update
-	sudo apt install -u `cat apt.txt`
+	sudo apt install -u `cat apt.txt apt.dev`
 # \ py
 $(PY) $(PIP):
 	python3 -m venv .

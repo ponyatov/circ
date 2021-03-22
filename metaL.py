@@ -175,6 +175,7 @@ giti = gitiFile()
 circ // (giti
          // '*~' // '*.swp' // '*.log' // ''
          // '/pyvenv.cfg' // '/lib/python*/' // '/lib64' // '/share/python*/'
+         // '/include/site/python*/'
          // '/__pycache__/'
          // ''
          // '/circ/')
@@ -199,7 +200,7 @@ def pyfiles():
             // '"**/__pycache__/**":true,'
             // '"**/bin/**":true,'
             // '"**/lib/**":true, "**/lib64/**":true,'
-            // '"**/share/**":true, "**/include/**":true,'
+            // '"**/share/**":true, "**/include/site/**":true,'
             // '"**/pyvenv.cfg":true, "**/*.pyc":true,'
             )
 
@@ -229,6 +230,23 @@ settings \
         )
 
 tasks = jsonFile('tasks'); vscode // tasks
+
+def vscodeTask(category, task):
+    return S('{', '},') \
+        // f'"label":          "{category}: {task}",' \
+        // '"type":           "shell",' \
+        // f'"command":        "make {task}",' \
+        // '"problemMatcher": []'
+
+
+tasks \
+    // (S('{', '}')
+        // '"version": "2.0.0",'
+        // (S('"tasks": [', ']')
+            // vscodeTask('project', 'install')
+            // vscodeTask('project', 'update')
+            ))
+
 extensions = jsonFile('extensions'); vscode // extensions
 launch = jsonFile('launch'); vscode // launch
 
@@ -296,7 +314,7 @@ mk \
         // '.PHONY: Linux_install Linux_update'
         // 'Linux_install Linux_update:'
         // '\tsudo apt update'
-        // '\tsudo apt install -u `cat apt.txt`'
+        // '\tsudo apt install -u `cat apt.txt apt.dev`'
         // (Sec('py')
             // '$(PY) $(PIP):' \
             // '\tpython3 -m venv .' \
@@ -308,11 +326,25 @@ mk \
     // Sec('merge')
 
 apt = File('apt', '.txt'); circ // apt
-apt // 'git make curl' // 'python3 python3-venv'
+apt \
+    // 'git make curl' \
+    // 'python3 python3-venv' \
+    // 'sqlite3'
+
+aptdev = File('apt', '.dev'); circ // aptdev
+aptdev \
+    // 'sqlitebrowser'
 
 reqs = File('requirements', '.txt'); circ // reqs
+reqs // 'Flask' // 'Flask-SQLAlchemy'
 
 py = pyFile('metaL'); circ // py
+
+config = pyFile('config'); circ // config
+config \
+    // f'{"SECRET_KEY":<11} = {os.urandom(0x11)}' \
+    // f'{"HOST":<11} = "127.0.0.1"' \
+    // f'{"PORT":<11} = 12345'
 
 # print(circ)
 circ.sync()

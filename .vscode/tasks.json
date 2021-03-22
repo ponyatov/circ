@@ -1,0 +1,17 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label":          "project: install",
+			"type":           "shell",
+			"command":        "make install",
+			"problemMatcher": []
+		},
+		{
+			"label":          "project: update",
+			"type":           "shell",
+			"command":        "make update",
+			"problemMatcher": []
+		},
+	]
+}

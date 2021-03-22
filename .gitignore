@@ -6,6 +6,7 @@
 /lib/python*/
 /lib64
 /share/python*/
+/include/site/python*/
 /__pycache__/
 
 /circ/
