@@ -224,7 +224,7 @@ README \
     // '' \
     // '`metaL` is a method of programming in Python, or any other language you prefer.' \
     // 'It works over two key features:' \
-    // '* homoiconic self-modifying data structures' \
+    // '* homoiconic self-modifying executable data structures (EDS)' \
     // '* metaprogramming via code generation' \
     // '' \
     // 'All `metaL` structures should be defined directly in the *host language*' \
