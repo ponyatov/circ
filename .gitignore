@@ -1,0 +1,11 @@
+*~
+*.swp
+*.log
+
+/pyvenv.cfg
+/lib/python*/
+/lib64
+/share/python*/
+/__pycache__/
+
+/circ/
