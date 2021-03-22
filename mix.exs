@@ -12,7 +12,7 @@ defmodule Metal.MixProject do
 
   def application do
     [
-      extra_applications: [:sasl,:logger],
+      extra_applications: [:sasl, :logger],
       mod: {Metal, []}
     ]
   end

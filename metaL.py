@@ -88,7 +88,7 @@ class S(Primitive):
         ret = ''
         # pfx
         if self.pfx != None:
-            ret += f'{to.tab*depth}{self.pfx}\n'
+            ret += f'{to.tab*depth}{self.pfx}\n' if self.pfx else '\n'
         # start
         ret += f'{to.tab*depth}{self.start}\n'
         # nest[]
@@ -473,7 +473,8 @@ mk \
             // '$^' \
             // '$(MAKE) format'
             // '$(MIX)  test') \
-        // (S('format: $(PEP)', pfx='.PHONY: format')) \
+        // (S('format: $(PEP)', pfx='.PHONY: format')
+            // '$(MIX) format') \
         // (S('$(PEP): $(S)') \
             // f'$@ {autopep8} --in-place $? && touch $@') \
         ) \
@@ -612,7 +613,7 @@ giti // '' // '*.beam'
 erl = erlFile('hello'); src // erl
 erl \
     // '-module(hello).' \
-    // '-exporr(world/0).' \
+    // '-export([world/0]).' \
     // '-on_load(reload/0).' \
     // '' \
     // 'reload() -> ok.' \
@@ -638,7 +639,7 @@ mix \
             // 'deps: deps()'))
         // ''
         // (S('def application do', 'end') // (S('[', ']')
-            // 'extra_applications: [:logger],'
+            // 'extra_applications: [:sasl, :logger],'
             // 'mod: {Metal, []}'))
         // ''
         // (S('defp deps do', 'end') // (S('[', ']')
@@ -660,12 +661,21 @@ ex \
             // 'opts = [strategy: :one_for_one, name: Metal.Supervisor]'
             // 'Supervisor.start_link(children, opts)'
             )
+        // (S('def hello do', 'end', pfx='') // ':world')
         )
 
 test = Dir('test'); circ // test
 extesthlp = exsFile('test_helper'); test // extesthlp
 extesthlp // 'ExUnit.start()'
 extest = exsFile('metal_test'); test // extest
+extest \
+    // (S('defmodule MetalTest do', 'end')
+        // 'use ExUnit.Case'
+        // (S('test "greets the world" do', 'end', pfx='')
+            // 'assert Metal.hello() == :world')
+        // (S('test "greets Erlang" do', 'end', pfx='')
+            // 'assert :hello.world() == \'World\'')
+        )
 
 # print(circ)
 circ.sync()

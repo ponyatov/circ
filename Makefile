@@ -45,6 +45,7 @@ test: $(PYT) test_metaL.py
 	$(MIX)  test
 .PHONY: format
 format: $(PEP)
+	$(MIX) format
 $(PEP): $(S)
 	$@ --ignore=E26,E302,E401,E402,E701,E702 --in-place $? && touch $@
 .PHONY: iex
