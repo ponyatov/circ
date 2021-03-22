@@ -73,7 +73,8 @@ class Object:
         assert isinstance(that, Object)
         self.nest += [that]; return self
 
-class Primitive(Object): pass
+class Primitive(Object):
+    pass
 
 class S(Primitive):
     def __init__(self, start, end=None, pfx=None):
@@ -114,9 +115,36 @@ class Sec(Primitive):
         # subtree
         return ret
 
-class IO(Object): pass
+# \ Meta
 
-class Path(IO): pass
+class Meta(Object):
+    pass
+
+class Class(Meta):
+    def __init__(self, C, sup=[]):
+        super().__init__(C.__name__)
+        self.sup = sup
+
+    def gen(self, depth, to):
+        if not self.sup:
+            par = ''
+        else:
+            par = '('
+            par += ','.join(map(lambda i: f'{i.__name__}', self.sup))
+            par += ')'
+        return \
+            (S(f'class {self.value}{par}:')
+                // 'pass'
+             // '').gen(depth, to)
+
+# / Meta
+# \ IO
+
+class IO(Object):
+    pass
+
+class Path(IO):
+    pass
 
 class Dir(IO):
     def __init__(self, V):
@@ -191,6 +219,11 @@ class exFile(File):
 class exsFile(exFile):
     def __init__(self, V, ext='.exs'):
         super().__init__(V, ext)
+
+# / File
+# / IO
+
+# \ metacircular
 
 
 circ = Dir('circ')
@@ -474,6 +507,40 @@ reqs = File('requirements', '.txt'); circ // reqs
 reqs // 'Flask' // 'Flask-SQLAlchemy'
 
 py = pyFile('metaL'); circ // py
+
+py \
+    // 'import config' \
+    // '' \
+    // 'import os, sys' \
+    // '' \
+    // Class(Object) \
+    // Class(Primitive, [Object]) \
+    // Class(S, [Primitive]) \
+    // Class(Sec, [Primitive]) \
+    // (Sec('Meta') // ''
+        // Class(Meta, [Object])
+        // Class(Class, [Meta])) \
+    // (Sec('IO') // ''
+        // Class(IO, [Object])
+        // Class(Path, [IO])
+        // Class(Dir, [IO])
+        // (Sec('File') // ''
+            // Class(File, [IO])
+            // Class(gitiFile, [IO])
+            // Class(jsonFile, [File])
+            // Class(cssFile, [File])
+            // Class(htmlFile, [File])
+            // Class(mkFile, [File])
+            // Class(mdFile, [File])
+            // Class(pyFile, [File])
+            // Class(erlFile, [File])
+            // Class(exFile, [File])
+            // Class(exsFile, [File])
+            )
+        ) \
+    // (Sec('metacircular') // '') \
+    // ''
+
 pytest = pyFile('test_metaL'); circ // pytest
 pytest // 'def test_any(): assert True'
 
@@ -553,3 +620,5 @@ mkAll \
 
 # print(circ)
 circ.sync()
+
+# / metacircular
