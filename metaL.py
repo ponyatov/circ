@@ -160,6 +160,14 @@ class jsonFile(File):
     def __init__(self, V, ext='.json', comment='//'):
         super().__init__(V, ext, comment=comment)
 
+class cssFile(File):
+    def __init__(self, V, ext='.css', comment='//'):
+        super().__init__(V, ext, comment=comment)
+
+class htmlFile(File):
+    def __init__(self, V, ext='.html', comment='//'):
+        super().__init__(V, ext, comment=comment)
+
 class mkFile(File):
     def __init__(self, V='Makefile', ext=''):
         super().__init__(V, ext)
@@ -475,6 +483,35 @@ config \
     // f'{"HOST":<11} = "127.0.0.1"' \
     // f'{"PORT":<11} = 12345'
 
+static = Dir('static'); circ // static
+
+css = cssFile('css'); static // css
+css \
+    // '* { background: #222; color: lightgreen; }'
+
+templates = Dir('templates'); circ // templates
+
+index = htmlFile('index'); templates // index
+
+index \
+    // '<!DOCTYPE html>' \
+    // (S('<html lang="ru">', '</html>')
+        // (S('<head>', '</head>')
+            // '<title>{{glob.head()}}</title>'
+            // '<link rel="shortcut icon" href="/static/logo.png" type="image/png">'
+            // '<meta charset="utf-8">'
+            // '<meta http-equiv="X-UA-Compatible" content="IE=edge">'
+            // '<meta name="viewport" content="width=device-width, initial-scale=1">'
+            // '<link href="/static/js/bootstrap.min.css" rel="stylesheet">'
+            // '<link href="/static/js/bootstrap.dark.css" rel="stylesheet">'
+            // (S('<!--[if lt IE 9]>', '<![endif]-->')
+                // '<script src="/static/js/html5shiv.min.js"></script>'
+                // '<script src="/static/js/respond.min.js"></script>')
+            // '<link href="/static/highlight.css" rel="stylesheet">'
+            // '<link href="/static/css.css" rel="stylesheet">'
+            // '{% block head %}{% endblock %}'
+            )
+        )
 
 giti // '' // '*.beam'
 
