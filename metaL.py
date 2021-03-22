@@ -301,7 +301,6 @@ class Web(Net):
         watch.schedule(event_handler(), 'templates', recursive=True)
         watch.start()
 
-
 # / Web
 # \ metacircular
 
