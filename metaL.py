@@ -167,6 +167,14 @@ class pyFile(File):
     def __init__(self, V, ext='.py', tab=' ' * 4):
         super().__init__(V, ext, tab=tab)
 
+class exFile(File):
+    def __init__(self, V, ext='.ex', tab=' ' * 2):
+        super().__init__(V, ext, tab=tab)
+
+class exsFile(exFile):
+    def __init__(self, V, ext='.exs'):
+        super().__init__(V, ext)
+
 
 circ = Dir('circ')
 Dir('.') // circ
@@ -345,6 +353,23 @@ config \
     // f'{"SECRET_KEY":<11} = {os.urandom(0x11)}' \
     // f'{"HOST":<11} = "127.0.0.1"' \
     // f'{"PORT":<11} = 12345'
+
+formatter = exsFile('.formatter'); circ // formatter
+formatter \
+    // (S('[', ']')
+        // 'inputs: ["{mix,.formatter}.exs", "{config,lib,test}/**/*.{ex,exs}"]')
+
+mix = exsFile('mix'); circ // mix
+mix \
+    // (S('defmodule Metal.MixProject do', 'end')
+        // 'use Mix.Project'
+        // ''
+        // (S('def project do [', '] end')
+            // 'app: :metal,'
+            // 'version: "0.0.1",'
+            // 'elixir: "~> 1.11",'
+            // '')
+        )
 
 # print(circ)
 circ.sync()
