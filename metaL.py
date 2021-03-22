@@ -518,7 +518,44 @@ mk \
             // (S('$(PYT):') \
                 // '$(PIP) install -U pytest')\
             )\
-        // (Sec('js') // S('js:', pfx='.PHONY: js'))\
+        // (Sec('js')
+            // (S('js: \\', pfx='.PHONY: js')
+            // 'static/js/bootstrap.min.css static/js/bootstrap.dark.css \\' \
+            // 'static/js/bootstrap.min.js  static/js/jquery.min.js \\' \
+            // 'static/js/html5shiv.min.js  static/js/respond.min.js \\' \
+            // 'static/js/socket.io.min.js  static/js/peg.min.js') \
+            // ''
+            // 'JQUERY_VER = 3.6.0' \
+            // 'static/js/jquery.min.js:' \
+            // '	$(CURL) $@ https://cdnjs.cloudflare.com/ajax/libs/jquery/$(JQUERY_VER)/jquery.min.js' \
+            // ''
+            // 'BOOTSTRAP_VER = 4.6.0' \
+            // 'static/js/bootstrap.min.css: static/js/bootstrap.min.css.map' \
+            // '	$(CURL) $@ https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/$(BOOTSTRAP_VER)/css/bootstrap.min.css' \
+            // 'static/js/bootstrap.min.css.map:' \
+            // '	$(CURL) $@ https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/$(BOOTSTRAP_VER)/css/bootstrap.min.css.map' \
+            // 'static/js/bootstrap.dark.css:' \
+            // '	$(CURL) $@ https://bootswatch.com/4/darkly/bootstrap.min.css' \
+            // 'static/js/bootstrap.min.js: static/js/bootstrap.min.js.map' \
+            // '	$(CURL) $@ https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/$(BOOTSTRAP_VER)/js/bootstrap.min.js' \
+            // 'static/js/bootstrap.min.js.map:' \
+            // '	$(CURL) $@ https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/$(BOOTSTRAP_VER)/js/bootstrap.min.js.map' \
+            // ''
+            // 'static/js/html5shiv.min.js:' \
+            // '	$(CURL) $@ https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js' \
+            // 'static/js/respond.min.js:' \
+            // '	$(CURL) $@ https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js' \
+            // ''
+            // 'SOCKETIO_VER = 3.1.2' \
+            // 'static/js/socket.io.min.js: static/js/socket.io.min.js.map' \
+            // '	$(CURL) $@ https://cdnjs.cloudflare.com/ajax/libs/socket.io/$(SOCKETIO_VER)/socket.io.min.js' \
+            // 'static/js/socket.io.min.js.map:' \
+            // '	$(CURL) $@ https://cdnjs.cloudflare.com/ajax/libs/socket.io/$(SOCKETIO_VER)/socket.io.min.js.map' \
+            // ''
+            // 'PEGJS_VER = 0.10.0' \
+            // 'static/js/peg.min.js:' \
+            // '	$(CURL) $@ https://github.com/pegjs/pegjs/releases/download/v$(PEGJS_VER)/peg-$(PEGJS_VER).min.js'
+            )\
         )\
     // Sec('merge')
 
@@ -596,13 +633,28 @@ js // (gitiFile() // '*' // '!.gitignore')
 
 css = cssFile('css'); static // css
 css \
-    // '* { background: #222; color: lightgreen; }'
+    // '#localtime  { position: absolute; top:0; right: 0; }' \
+    // '.online     { background: #0F03; }' \
+    // '.offline    { background: #F005; }'
+
+hlcss = cssFile('highlight'); static // hlcss
+hlcss \
+    // '.hash  { color:grey;       }' \
+    // '.op    { color:orange;     }' \
+    // '.lg    { color:yellow;     }' \
+    // '.clazz { color:lightblue;  }' \
+    // '.slot  { color:lightgreen; }'
+
 
 templates = Dir('templates'); circ // templates
 
 index = htmlFile('index'); templates // index
 
-index // '{% extends "all.html" %}'
+index \
+    // '{% extends "all.html" %}' \
+    // '{% block body %}' \
+    // '<pre id=dump class=dump>{{env.dump()}}</pre>' \
+    // '{% endblock %}'
 
 allhtml = htmlFile('all'); templates // allhtml
 allhtml \
@@ -629,7 +681,8 @@ allhtml \
                     // '<img id="logo" class="nav-logo" src="/static/logo.png">'
                     // '<span class="navbar-brand dump">{{env.head()}}</span>'
                     // '<pre id="localtime">date | time</pre>'
-                    )))
+                    )
+                // '{% block body %}{% endblock %}'))
         )
 
 giti // '' // '*.beam'

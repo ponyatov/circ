@@ -1,1 +1,3 @@
-* { background: #222; color: lightgreen; }
+#localtime  { position: absolute; top:0; right: 0; }
+.online     { background: #0F03; }
+.offline    { background: #F005; }
