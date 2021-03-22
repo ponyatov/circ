@@ -73,6 +73,11 @@ class Object:
         assert isinstance(that, Object)
         self.nest += [that]; return self
 
+class Env(Object): pass
+
+
+glob = Env('global')
+
 class Primitive(Object):
     pass
 
@@ -232,7 +237,17 @@ class Net(IO):
 import flask
 
 class Web(Net):
-    pass
+    def __init__(self):
+        super().__init__(MODULE)
+        self.app = flask.Flask(self.value)
+
+        @self.app.route('/')
+        def index():
+            return flask.render_template('index.html',
+                                         glob=glob, env=glob)
+
+    def eval(self, env):
+        self.app.run(host=config.HOST, port=config.PORT, debug=True)
 
 
 # / Web
@@ -569,13 +584,15 @@ py \
 pytest = pyFile('test_metaL'); circ // pytest
 pytest // 'def test_any(): assert True'
 
-config = pyFile('config'); circ // config
-config \
+pyconfig = pyFile('config'); circ // pyconfig
+pyconfig \
     // f'{"SECRET_KEY":<11} = {os.urandom(0x11)}' \
     // f'{"HOST":<11} = "127.0.0.1"' \
     // f'{"PORT":<11} = 12345'
 
 static = Dir('static'); circ // static
+js = Dir('js'); static // js
+js // (gitiFile() // '*' // '!.gitignore')
 
 css = cssFile('css'); static // css
 css \
@@ -606,6 +623,13 @@ allhtml \
             // '<link href="/static/css.css" rel="stylesheet">'
             // '{% block head %}{% endblock %}'
             )
+        // (S('<body>', '</body>')
+            // (S('<div class="container-fluid">', '</div>')
+                // (S('<nav class="navbar bg-dark">', '</nav>')
+                    // '<img id="logo" class="nav-logo" src="/static/logo.png">'
+                    // '<span class="navbar-brand dump">{{env.head()}}</span>'
+                    // '<pre id="localtime">date | time</pre>'
+                    )))
         )
 
 giti // '' // '*.beam'
@@ -678,11 +702,15 @@ extest \
             // 'assert :hello.world() == \'World\'')
         )
 
-# print(circ)
 circ.sync()
 
 # / metacircular
 # \ system init
 if __name__ == "__main__":
-    pass
+    if sys.argv[1] == 'all':
+        pass
+    elif sys.argv[1] == 'web':
+        Web().eval(glob)
+    else:
+        raise SyntaxError(sys.argv)
 # / system init

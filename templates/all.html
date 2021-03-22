@@ -16,4 +16,13 @@
 		<link href="/static/css.css" rel="stylesheet">
 		{% block head %}{% endblock %}
 	</head>
+	<body>
+		<div class="container-fluid">
+			<nav class="navbar bg-dark">
+				<img id="logo" class="nav-logo" src="/static/logo.png">
+				<span class="navbar-brand dump">{{env.head()}}</span>
+				<pre id="localtime">date | time</pre>
+			</nav>
+		</div>
+	</body>
 </html>
