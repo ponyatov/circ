@@ -483,26 +483,23 @@ mk \
         // '$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf') \
         ) \
     // (Sec('install')
-        // '.PHONY: install'
-        // (S('install: $(OS)_install js doc') \
+        // (S('install: $(OS)_install js doc', pfx='.PHONY: install') \
             // '$(MAKE) $(PIP)' \
             // '$(MAKE) update'
             ) \
-        // '.PHONY: update'
-        // (S('update: $(OS)_update')
+        // (S('update: $(OS)_update', pfx='.PHONY: update')
             // '$(PIP) install -U    pip autopep8'
             // '$(PIP) install -U -r requirements.txt'
             // '$(MIX) deps.get') \
-        // '.PHONY: Linux_install Linux_update'
-        // (S('Linux_install Linux_update:')
+        // (S('Linux_install Linux_update:', pfx='.PHONY: Linux_install Linux_update')
             // 'sudo apt update'
             // 'sudo apt install -u `cat apt.txt apt.dev`') \
         // (Sec('py')
             // (S('$(PY) $(PIP):') \
-            // 'python3 -m venv .' \
-            // '$(MAKE) update') \
+                // 'python3 -m venv .' \
+                // '$(MAKE) update') \
             // (S('$(PYT):') \
-            // '$(PIP) install -U pytest')\
+                // '$(PIP) install -U pytest')\
             )\
         // (Sec('js') // S('js:', pfx='.PHONY: js'))\
         )\
