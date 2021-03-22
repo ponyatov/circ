@@ -203,7 +203,7 @@ def multiCommand(fkey, target):
                     // f'"args": {{"text": "\\u000D clear ; make {target} \\u000D"}}}}')
                 ))
 
-def pyfiles():
+def pyFiles():
     return (Sec('py')
             // '"**/__pycache__/**":true,'
             // '"**/bin/**":true,'
@@ -211,6 +211,9 @@ def pyfiles():
             // '"**/share/**":true, "**/include/site/**":true,'
             // '"**/pyvenv.cfg":true, "**/*.pyc":true,'
             )
+
+def exFiles():
+    return (Sec('ex') // '"**/_build/**":true,')
 
 
 settings \
@@ -226,8 +229,8 @@ settings \
                 // multiCommand('f12', 'all')
                 ))
         // (Sec('files')
-            // (S('"files.watcherExclude": {', '},') // pyfiles())
-            // (S('"files.exclude": {', '},') // pyfiles())
+            // (S('"files.watcherExclude": {', '},') // pyFiles() // exFiles())
+            // (S('"files.exclude": {', '},') // pyFiles() // exFiles())
             // (S('"files.associations": {', '},') // '"requirements.*": "config",')
             )
         // (Sec('editor')
@@ -268,6 +271,7 @@ tmp = Dir('tmp'); circ // tmp
 tmp // (gitiFile() // '*' // '!.gitignore')
 
 mk = mkFile(); circ // mk
+mkAll = Sec('all')
 mk \
     // (Sec('var')
         // 'MODULE = $(notdir $(CURDIR))'
@@ -287,6 +291,8 @@ mk \
         // 'PIP    = bin/pip3'
         // 'PEP    = bin/autopep8'
         // 'PYT    = bin/pytest'
+        // 'MIX    = mix'
+        // 'IEX    = iex'
         )\
     // (Sec('src')
         // 'P     += config.py'
@@ -295,7 +301,7 @@ mk \
         )\
     // Sec('obj')\
     // Sec('cfg')\
-    // (Sec('all')
+    // (mkAll \
         // '.PHONY: all' \
         // 'all: $(PY) metaL.py' \
         // '\t$^ $@' \
@@ -308,8 +314,13 @@ mk \
         // 'format: $(PEP)' \
         // '$(PEP): $(S)' \
         // f'\t$@ {autopep8} --in-place $? && touch $@' \
-        )\
-    // (Sec('doc') // S('doc:', pfx='.PHONY: doc'))\
+        ) \
+    // (Sec('doc') \
+        // (S('doc: \\', pfx='.PHONY: doc') \
+            // 'doc/Armstrong_ru.pdf') \
+        // (S('doc/Armstrong_ru.pdf:') \
+        // '\t$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf') \
+        ) \
     // (Sec('install')
         // '.PHONY: install'
         // 'install: $(OS)_install js doc'
@@ -319,6 +330,7 @@ mk \
         // 'update: $(OS)_update'
         // '\t$(PIP) install -U    pip autopep8'
         // '\t$(PIP) install -U -r requirements.txt'
+        // '\t$(MIX) deps.get'
         // '.PHONY: Linux_install Linux_update'
         // 'Linux_install Linux_update:'
         // '\tsudo apt update'
@@ -337,6 +349,7 @@ apt = File('apt', '.txt'); circ // apt
 apt \
     // 'git make curl' \
     // 'python3 python3-venv' \
+    // 'elixir' \
     // 'sqlite3'
 
 aptdev = File('apt', '.dev'); circ // aptdev
@@ -354,7 +367,7 @@ config \
     // f'{"HOST":<11} = "127.0.0.1"' \
     // f'{"PORT":<11} = 12345'
 
-giti // '' // '/deps/' // '/mix.lock'
+giti // '' // '/_build/' // '/deps/' // '/mix.lock'
 
 formatter = exsFile('.formatter'); circ // formatter
 formatter \
@@ -379,6 +392,9 @@ mix \
             // '{:cowboy, "~> 2.8"},'
             // '{:exsync, "~> 0.2", only: :dev}')
         )
+
+mkAll \
+    // (S('iex:', pfx='.PHONY: iex') // '$(IEX) -S $(MIX)')
 
 # print(circ)
 circ.sync()

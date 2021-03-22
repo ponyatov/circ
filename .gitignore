@@ -11,5 +11,6 @@
 
 /circ/
 
+/_build/
 /deps/
 /mix.lock

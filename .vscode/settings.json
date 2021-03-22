@@ -34,6 +34,9 @@
 		"**/share/**":true, "**/include/site/**":true,
 		"**/pyvenv.cfg":true, "**/*.pyc":true,
 		// / py
+		// \ ex
+		"**/_build/**":true,
+		// / ex
 	},
 	"files.exclude": {
 		// \ py
@@ -43,6 +46,9 @@
 		"**/share/**":true, "**/include/site/**":true,
 		"**/pyvenv.cfg":true, "**/*.pyc":true,
 		// / py
+		// \ ex
+		"**/_build/**":true,
+		// / ex
 	},
 	"files.associations": {
 		"requirements.*": "config",
