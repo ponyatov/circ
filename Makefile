@@ -17,6 +17,8 @@ PY     = bin/python3
 PIP    = bin/pip3
 PEP    = bin/autopep8
 PYT    = bin/pytest
+ERL    = erl
+ERLC   = erlc
 MIX    = mix
 IEX    = iex
 # / tool

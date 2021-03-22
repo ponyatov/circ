@@ -11,6 +11,8 @@
 
 /circ/
 
+*.beam
+
 /_build/
 /deps/
 /mix.lock

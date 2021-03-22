@@ -163,8 +163,16 @@ class mkFile(File):
     def __init__(self, V='Makefile', ext=''):
         super().__init__(V, ext)
 
+class mdFile(File):
+    def __init__(self, V, ext='.md'):
+        super().__init__(V, ext)
+
 class pyFile(File):
     def __init__(self, V, ext='.py', tab=' ' * 4):
+        super().__init__(V, ext, tab=tab)
+
+class erlFile(File):
+    def __init__(self, V, ext='.erl', tab=' ' * 2):
         super().__init__(V, ext, tab=tab)
 
 class exFile(File):
@@ -178,6 +186,37 @@ class exsFile(exFile):
 
 circ = Dir('circ')
 Dir('.') // circ
+
+MODULE = 'metaL'
+TITLE = 'homoiconic [meta]programming [L]anguage / [L]ayer'
+AUTHOR = 'Dmitry Ponyatov'
+EMAIL = 'dponyatov@gmail.com'
+GITHUB = f'http:///github.com/ponyatov/{MODULE}'
+
+README = mdFile('README'); circ // README
+README \
+    // f'#  `{MODULE}`' \
+    // f'## {TITLE}' \
+    // '' \
+    // f'(c) {AUTHOR} <<{EMAIL}>> 2020 MIT' \
+    // '' \
+    // f'github: {GITHUB}' \
+    // '' \
+    // '* object graph database' \
+    // '* homoiconic metaprogramming language' \
+    // '* web platform' \
+    // '' \
+    // '## Idea' \
+    // '' \
+    // '* take Lisp homoiconic nature and port it to Python stack (VM & libs)' \
+    // '* provide a light environment for generative metaprogramming (scripted code generation)' \
+    // '  * writing programs that write other programs' \
+    // '  * system bootstrap via metacircular definition' \
+    // '  * automated source code generation for typical tasks' \
+    // '' \
+    // '## Links' \
+    // '' \
+    // ''
 
 giti = gitiFile()
 circ // (giti
@@ -259,6 +298,20 @@ tasks \
             ))
 
 extensions = jsonFile('extensions'); vscode // extensions
+
+extensions \
+    // (S('{', '}')
+        // (S('"recommendations": [', ']')
+            // '"ryuta46.multi-command",'
+            // '"stkb.rewrap",'
+            // '"auchenberg.vscode-browser-preview",'
+            // '// "tabnine.tabnine-vscode",'
+            // '"ms-python.python",'
+            // '// "betterthantomorrow.calva",'
+            // '"pgourlain.erlang",'
+            // '"jakebecker.elixir-ls",'
+            ))
+
 launch = jsonFile('launch'); vscode // launch
 
 bin = Dir('bin'); circ // bin
@@ -266,6 +319,9 @@ bin // (gitiFile() // '*' // '!.gitignore')
 
 doc = Dir('doc'); circ // doc
 doc // (gitiFile() // '*' // '!.gitignore')
+
+src = Dir('src'); circ // src
+src // (gitiFile() // '!.gitignore')
 
 tmp = Dir('tmp'); circ // tmp
 tmp // (gitiFile() // '*' // '!.gitignore')
@@ -291,6 +347,8 @@ mk \
         // 'PIP    = bin/pip3'
         // 'PEP    = bin/autopep8'
         // 'PYT    = bin/pytest'
+        // 'ERL    = erl'
+        // 'ERLC   = erlc'
         // 'MIX    = mix'
         // 'IEX    = iex'
         )\
@@ -349,7 +407,7 @@ apt = File('apt', '.txt'); circ // apt
 apt \
     // 'git make curl' \
     // 'python3 python3-venv' \
-    // 'elixir' \
+    // 'erlang elixir' \
     // 'sqlite3'
 
 aptdev = File('apt', '.dev'); circ // aptdev
@@ -360,12 +418,20 @@ reqs = File('requirements', '.txt'); circ // reqs
 reqs // 'Flask' // 'Flask-SQLAlchemy'
 
 py = pyFile('metaL'); circ // py
+pytest = pyFile('test_metaL'); circ // pytest
+pytest // 'def test_any(): assert True'
 
 config = pyFile('config'); circ // config
 config \
     // f'{"SECRET_KEY":<11} = {os.urandom(0x11)}' \
     // f'{"HOST":<11} = "127.0.0.1"' \
     // f'{"PORT":<11} = 12345'
+
+
+giti // '' // '*.beam'
+
+erl = erlFile('hello'); src // erl
+erl // '-module(hello).'
 
 giti // '' // '/_build/' // '/deps/' // '/mix.lock'
 
