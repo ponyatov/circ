@@ -83,6 +83,7 @@ class S(Primitive):
         self.pfx = pfx
 
     def gen(self, depth, to):
+        if not self.value: return '\n'
         ret = ''
         # pfx
         if self.pfx != None:
@@ -492,18 +493,19 @@ mix \
     // (S('defmodule Metal.MixProject do', 'end')
         // 'use Mix.Project'
         // ''
-        // (S('def project do [', '] end')
+        // (S('def project do', 'end') // (S('[', ']')
             // 'app: :metal,'
             // 'version: "0.0.1",'
             // 'elixir: "~> 1.11",'
-            // 'deps: deps()')
+            // 'deps: deps()'))
         // ''
-        // (S('def application do [', '] end')
+        // (S('def application do', 'end') // (S('[', ']')
             // 'extra_applications: [:logger],'
-            // 'mod: {Metal.Application, []}')
-        // (S('defp deps do [', '] end')
+            // 'mod: {Metal.Application, []}'))
+        // ''
+        // (S('defp deps do', 'end') // (S('[', ']')
             // '{:cowboy, "~> 2.8"},'
-            // '{:exsync, "~> 0.2", only: :dev}')
+            // '{:exsync, "~> 0.2", only: :dev}'))
         )
 
 mkAll \
