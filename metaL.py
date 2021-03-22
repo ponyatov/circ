@@ -546,7 +546,9 @@ mk \
         ) \
     // (Sec('doc') \
         // (S('doc: \\', pfx='.PHONY: doc') \
-            // 'doc/Armstrong_ru.pdf') \
+            // 'doc/SICP_ru.pdf doc/Armstrong_ru.pdf') \
+        // (S('doc/SICP_ru.pdf:') \
+        // '$(CURL) $@ https://newstar.rinet.ru/~goga/sicp/sicp.pdf')
         // (S('doc/Armstrong_ru.pdf:') \
         // '$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf') \
         ) \
@@ -608,7 +610,20 @@ mk \
             // '	$(CURL) $@ https://github.com/pegjs/pegjs/releases/download/v$(PEGJS_VER)/peg-$(PEGJS_VER).min.js'
             )\
         )\
-    // Sec('merge')
+    // (Sec('merge')
+        // 'MERGE += README.md Makefile .gitignore apt.txt apt.dev' \
+        // 'MERGE += .vscode bin doc tmp' \
+        // 'MERGE += requirements.txt $(S) mix.exs lib src test'
+        // '.PHONY: main' \
+        // 'main:' \
+        // '	git push -v' \
+        // '	git checkout $@' \
+        // '	git checkout shadow -- $(MERGE)' \
+        // '.PHONY: shadow' \
+        // 'shadow:' \
+        // '	git push -v' \
+        // '	git checkout $@' \
+        // '')
 
 apt = File('apt', '.txt'); circ // apt
 apt \

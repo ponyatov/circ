@@ -55,7 +55,9 @@ iex:
 # \ doc
 .PHONY: doc
 doc: \
-	doc/Armstrong_ru.pdf
+	doc/SICP_ru.pdf doc/Armstrong_ru.pdf
+doc/SICP_ru.pdf:
+	$(CURL) $@ https://newstar.rinet.ru/~goga/sicp/sicp.pdf
 doc/Armstrong_ru.pdf:
 	$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf
 # / doc
@@ -121,4 +123,17 @@ static/js/peg.min.js:
 # / js
 # / install
 # \ merge
+MERGE += README.md Makefile .gitignore apt.txt apt.dev
+MERGE += .vscode bin doc tmp
+MERGE += requirements.txt $(S) mix.exs lib src test
+.PHONY: main
+main:
+	git push -v
+	git checkout $@
+	git checkout shadow -- $(MERGE)
+.PHONY: shadow
+shadow:
+	git push -v
+	git checkout $@
+
 # / merge
